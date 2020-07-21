@@ -28,11 +28,14 @@ function [res] = rbf(X, t, X_test, spread, k)
     
     % calculate phi (radial distance)
     Phi_train = radialDist(X, C, spread);
+    Phi_train = [Phi_train, ones(size(Phi_train,1),1)];
     
     % solve the equation Phi * W = T
     W = pinv(Phi_train) * t;
     
     Phi_test = radialDist(X_test, C, spread);
+    Phi_test = [Phi_test, ones(size(Phi_test,1),1)];
+    
     p = Phi_test * W;
     [~, res] = max(p, [],2);
 

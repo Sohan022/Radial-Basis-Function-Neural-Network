@@ -1,9 +1,9 @@
 %% INITIALIZATION & CONTANTS
-NUM_OF_CENTERS = 30;
+NUM_OF_CENTERS = 3;
 SPREAD = 0.1;
 
 %% DATA PREPARATION
-iris=csvread('iris.csv');
+% iris=csvread('iris.csv');
 
 y_temp=iris.variety;
 
@@ -30,7 +30,7 @@ for k=1:3
     % test data extraction
     fprintf("data number %d to %d as test\n", round((k-1)*test_P*m)+1, round(k*test_P*m))
     X_test = X(idx(round((k-1)*test_P*m)+1:round(k*test_P*m)),:); 
-    y_test = y(idx(round((k-1)*test_P*m)+1:round(k*test_P*m)),:); 
+    y_validation = y(idx(round((k-1)*test_P*m)+1:round(k*test_P*m)),:); 
     
     % train data extraction
     X_train = X; y_train = y;
@@ -41,7 +41,8 @@ for k=1:3
     t = rbf(X_train, y_train, X_test, 0.5, 4);
     
     % calculate accuracy
-    matches = (t == max(y_test, [],2));
+    [~, argMax] = max(y_validation, [],2);
+    matches = (t == argMax);
     
-    fprintf("Accuracy: %d\n", sum(matches)/size(y,1));
+    fprintf("Accuracy: %d\n", sum(matches)/size(y_validation,1));
 end
